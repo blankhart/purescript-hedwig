@@ -1,8 +1,17 @@
-module Hedwig (module Exports, (:>), sync) where
+module Hedwig (
+  module Exports, 
+  (#>), withAff, 
+  (#!>), withEffect, 
+  (:>), withAffs, 
+  (:!>), withEffects, 
+  sync
+) where
 
 import Data.Tuple (Tuple(..))
+import Effect.Aff as Aff
+import Prelude
 
-import Hedwig.Application (Init, Update, View, Application, mount) as Exports
+import Hedwig.Application (Init, Update, View, Application, Sub, Sink, mount) as Exports
 
 import Hedwig.Event (
   onClick,
@@ -230,7 +239,34 @@ import Hedwig.Property (
   wrap
 ) as Exports
 
-infixr 6 Tuple as :>
+aff2sub :: forall msg . Aff msg -> Exports.Sub msg
+aff2sub aff = \sink -> do
+  msg <- aff
+  Aff.makeAff $ \cb -> do 
+    sink msg
+    cb (pure unit)
+    pure mempty
+
+effect2sub :: forall msg . Effect msg -> Exports.Sub msg
+effect2sub effect = \sink -> liftEffect (effect >>= sink)
+
+withAff :: forall model msg . model -> Aff msg -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withAff model affs = Tuple model [aff2sub affs]
+
+withAffs :: forall model msg . model -> Array (Aff msg) -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withAffs model affs = Tuple model (map aff2sub affs)
+
+withEffect :: forall model msg . model -> Effect msg -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withEffect model effect = Tuple model [effect2sub effect]
+
+withEffects :: forall model msg . model -> Array (Effect msg) -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withEffects model effects = Tuple model (map effect2sub effects)
+
+infixr 6 withAff as #>
+infixr 6 withEffect as #!>
+
+infixr 6 withAffs as :>
+infixr 6 withEffects as :!>
 
 sync :: forall a. Effect a -> Aff a
 sync = liftEffect

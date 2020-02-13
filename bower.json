@@ -13,6 +13,7 @@
     "purescript-web-events": "^2.0.1",
     "purescript-web-dom": "^4.0.0",
     "purescript-web-html": "^2.3.0",
+    "purescript-web-socket": "^2.0.0",
     "purescript-nullable": "^4.1.1",
     "purescript-aff": "^5.1.2"
   },

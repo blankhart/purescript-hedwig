@@ -16,9 +16,13 @@ import Hedwig.Foreign as Foreign
 import Unsafe.Coerce (unsafeCoerce)
 import Web.DOM (Element)
 
-type Init model msg = Tuple model (Array (Aff msg))
+type Sink msg = msg -> Effect Unit
 
-type Update model msg = model -> msg -> Tuple model (Array (Aff msg))
+type Sub msg = Sink msg -> Aff Unit
+
+type Init model msg = Tuple model (Array (Sub msg))
+
+type Update model msg = model -> msg -> Tuple model (Array (Sub msg))
 
 type View model msg = model -> Html msg
 
@@ -42,30 +46,30 @@ mount' el app = do
   vnode <- Ref.new (unsafeCoerce "!")
   let
     start = do
-      let Tuple model' affs = app.init
+      let Tuple model' subs = app.init
       Foreign.devtools.send model' (unsafeCoerce "!")
       Ref.write model' model
       let html = app.view model'
       newVnode <- Foreign.patch0 el html send
       Ref.write newVnode vnode
-      dispatch affs
+      dispatch subs
     send msg = do
       oldModel <- Ref.read model
-      let Tuple newModel affs = app.update oldModel msg
+      let Tuple newModel subs = app.update oldModel msg
       Foreign.devtools.send newModel msg
       Ref.write newModel model
       render
-      dispatch affs
+      dispatch subs
     render = do
       oldVnode <- Ref.read vnode
       html <- app.view <$> Ref.read model
       newVnode <- Foreign.patch oldVnode html send
       Ref.write newVnode vnode
-    dispatch affs = do
-      for_ affs $ \aff -> do
+    dispatch subs = do
+      for_ subs $ \sub -> do
         Aff.runAff_ (case _ of
           Left error -> Foreign.log error
-          Right msg' -> send msg') aff
+          Right _ -> pure unit) (sub send)
     setModel newModel = do
       Ref.write newModel model
       render

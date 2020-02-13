@@ -8,6 +8,7 @@ import Data.Array as Array
 import Data.Int as Int
 import Data.Maybe (Maybe(..))
 import Data.Maybe as Maybe
+import Data.Tuple (Tuple(..))
 import Data.Unfoldable (replicateA)
 import Effect (Effect)
 import Effect.Random as Random
@@ -152,7 +153,7 @@ viewRowLazy row = H.lazy "tr" (show row.id) viewRow row
 
 viewRow :: Row -> H.Html Msg
 viewRow { id, label, selected } =
-  H.tr [ H.key (show id), H.classList ["danger" :> selected]]
+  H.tr [ H.key (show id), H.classList [Tuple "danger" selected]]
     [ H.td [ H.class' "col-md-1" ] [ H.text (show id) ]
     , H.td [ H.class' "col-md-4" ]
       [ H.a [ H.href "#", H.attribute "data-action" "Select", H.attribute "data-id" (show id)  ]
