@@ -21,7 +21,8 @@
     "purescript-psci-support": "^4.0.0",
     "purescript-random": "^4.0.0",
     "purescript-integers": "^4.0.0",
-    "purescript-affjax": "^10.0.0"
+    "purescript-affjax": "^10.0.0",
+    "purescript-windrose-router": "https://github.com/blankhart/purescript-windrose-router"
   },
   "resolutions": {
     "purescript-web-storage": "3",

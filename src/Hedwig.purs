@@ -1,9 +1,13 @@
 module Hedwig (
   module Exports, 
-  (#>), withAff, 
+  (#>), withAff,  
+  (<#), withAffFlip, 
   (#!>), withEffect, 
+  (<!#), withEffectFlip,
   (:>), withAffs, 
+  (<:), withAffsFlip, 
   (:!>), withEffects, 
+  (<!:), withEffectsFlip, 
   sync
 ) where
 
@@ -253,20 +257,36 @@ effect2sub effect = \sink -> liftEffect (effect >>= sink)
 withAff :: forall model msg . model -> Aff msg -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
 withAff model affs = Tuple model [aff2sub affs]
 
+withAffFlip :: forall model msg . Aff msg -> model -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withAffFlip = flip withAff
+
 withAffs :: forall model msg . model -> Array (Aff msg) -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
 withAffs model affs = Tuple model (map aff2sub affs)
+
+withAffsFlip :: forall model msg . Array (Aff msg) -> model -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withAffsFlip = flip withAffs
 
 withEffect :: forall model msg . model -> Effect msg -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
 withEffect model effect = Tuple model [effect2sub effect]
 
+withEffectFlip :: forall model msg . Effect msg -> model -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withEffectFlip = flip withEffect
+
 withEffects :: forall model msg . model -> Array (Effect msg) -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
 withEffects model effects = Tuple model (map effect2sub effects)
 
+withEffectsFlip :: forall model msg . Array (Effect msg) -> model -> Tuple model (Array ((msg -> Effect Unit) -> Aff Unit))
+withEffectsFlip = flip withEffects
+
 infixr 6 withAff as #>
 infixr 6 withEffect as #!>
+infixr 6 withAffFlip as <#
+infixr 6 withEffect as <!#
 
 infixr 6 withAffs as :>
 infixr 6 withEffects as :!>
+infixr 6 withAffsFlip as <:
+infixr 6 withEffectsFlip as <!:
 
 sync :: forall a. Effect a -> Aff a
 sync = liftEffect
