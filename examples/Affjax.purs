@@ -32,10 +32,10 @@ update model = case _ of
     model { url = url, result = NotFetched } :> []
   Fetch ->
     model { result = Fetching } :> [ do
-      response <- Affjax.get ResponseFormat.string model.url
-      pure $ case response.body of
-        Left error -> Fetched $ Error $ Affjax.printResponseFormatError error
-        Right ok -> Fetched $ Ok ok
+      result <- Affjax.get ResponseFormat.string model.url
+      pure $ case result of
+        Left error -> Fetched $ Error $ Affjax.printError error
+        Right response -> Fetched $ Ok response.body
     ]
   Fetched result ->
     model { result = result } :> []

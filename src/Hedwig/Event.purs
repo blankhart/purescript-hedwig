@@ -3,7 +3,7 @@ module Hedwig.Event where
 import Prelude
 
 import Control.Alt ((<|>))
-import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Effect (Effect)
 import Hedwig.Foreign (Trait, on, on')
 import Web.DOM.Node (Node)

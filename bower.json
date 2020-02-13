@@ -7,19 +7,27 @@
     "output"
   ],
   "dependencies": {
-    "purescript-prelude": "^4.1.0",
-    "purescript-console": "^4.1.0",
-    "purescript-effect": "^2.0.0",
-    "purescript-web-events": "^1.0.0",
-    "purescript-web-dom": "^1.0.0",
-    "purescript-web-html": "^1.0.0",
-    "purescript-nullable": "^4.0.0",
-    "purescript-aff": "^5.0.1"
+    "purescript-prelude": "^4.1.1",
+    "purescript-console": "^4.4.0",
+    "purescript-effect": "^2.0.1",
+    "purescript-web-events": "^2.0.1",
+    "purescript-web-dom": "^4.0.0",
+    "purescript-web-html": "^2.3.0",
+    "purescript-nullable": "^4.1.1",
+    "purescript-aff": "^5.1.2"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0",
     "purescript-random": "^4.0.0",
     "purescript-integers": "^4.0.0",
-    "purescript-affjax": "^7.0.0"
+    "purescript-affjax": "^10.0.0"
+  },
+  "resolutions": {
+    "purescript-web-storage": "3",
+    "purescript-argonaut-core": "^5.0.0",
+    "purescript-foreign-object": "^2.0.0",
+    "purescript-typelevel-prelude": ">= 4.0.0 < 6.0.0",
+    "purescript-web-xhr": "^3.0.0",
+    "purescript-form-urlencoded": "^5.0.0"
   }
 }
