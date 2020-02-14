@@ -58,7 +58,6 @@ socketSub socket = \sink -> liftEffect do
     (WS.toEventTarget socket)
   listenerErrorEvent <- EET.eventListener \_ -> do
     status <- readyState socket 
-    -- Report that an error occurred, etc.
     sink $ ConnectionMsg status
   EET.addEventListener
     WSET.onError
@@ -67,7 +66,6 @@ socketSub socket = \sink -> liftEffect do
     (WS.toEventTarget socket)
   listenerCloseEvent <- EET.eventListener \ev -> 
       for_ (CE.fromEvent ev) \_ -> do
-    -- Determine whether connection was clean, reason, etc.
     status <- readyState socket 
     sink $ ConnectionMsg status
   EET.addEventListener

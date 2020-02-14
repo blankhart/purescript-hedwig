@@ -1,7 +1,5 @@
 { sources =
-    [ "src/**/*.purs"
-    , "examples/**/*.purs"
-    ]
+    [ "src/**/*.purs", "examples/**/*.purs" ]
 , name =
     "hedwig"
 , dependencies =
