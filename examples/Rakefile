@@ -1,9 +1,16 @@
 mkdir_p "dist"
 
 FileList["*.purs"].ext("").each do |name|
+
   task :default => "dist/#{name}.js"
-  file "dist/#{name}.js" => ["#{name}.purs", *FileList["../src/**/*"]] do |a|
-    sh "cd .. && pulp browserify --include examples --optimise --main Examples.#{name} --to examples/dist/#{name}.js"
+  if name == "Router"
+    file "dist/#{name}.js" => ["#{name}.purs", *FileList["../src/**/*"]] do |a|
+      sh "cd .. && spago bundle-app --main Examples.#{name} --to examples/dist/#{name}.js"
+    end
+  else 
+    file "dist/#{name}.js" => ["#{name}.purs", *FileList["../src/**/*"]] do |a|
+      sh "cd .. && pulp browserify --optimise --main Examples.#{name} --to examples/dist/#{name}.js"
+    end
   end
 
   task :default => "dist/#{name}.html"

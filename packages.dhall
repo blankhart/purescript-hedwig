@@ -6,6 +6,12 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions = {
+      windrose-router =
+          mkPackage
+            [ "aff-coroutines", "effect", "console", "halogen", "heterogeneous", "psci-support", "strings", "strongcheck" ]
+            "https://github.com/blankhart/purescript-windrose-router.git"
+            "v0.1"
+}
 
 in  upstream // overrides // additions

@@ -1,5 +1,7 @@
 { sources =
-    [ "src/**/*.purs", "examples/**/*.purs" ]
+    [ "src/**/*.purs"
+    , "examples/**/*.purs"
+    ]
 , name =
     "hedwig"
 , dependencies =
@@ -18,6 +20,7 @@
     , "web-html"
     , "web-socket"
     , "web-uievents"
+    , "windrose-router"
     ]
 , packages =
     ./packages.dhall

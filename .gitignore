@@ -1,4 +1,5 @@
 **/.cache/
+**/dist
 /bower_components/
 /node_modules/
 /.pulp-cache/
@@ -9,5 +10,4 @@
 /.psc*
 /.purs*
 /.psa*
-/examples/dist
 .*~
